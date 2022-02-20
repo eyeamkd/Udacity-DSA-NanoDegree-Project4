@@ -1,5 +1,5 @@
 class GraphNode:
-    def __init__(self, data: int) -> None:
+    def __init__(self, data) -> None:
         self.data = data
         self.children = []
         pass
@@ -29,7 +29,32 @@ class Graph:
         if from_node in self.nodes and to_node in self.nodes:
             from_node.remove_child(to_node)
             to_node.remove_child(from_node)
-        pass
+        pass 
+    
+    def dfs_search(self, root_node, search_value):
+        stack = []
+
+        names = [] 
+        
+        visited = [] 
+        
+        stack.append(root_node)
+        names.append(root_node.data)
+        
+        while( len(stack) != 0):
+            node : GraphNode = stack.pop()
+            names.remove(node.data) 
+            visited.append(node.data)
+            children = node.children 
+            for child in children:
+                if child.data == search_value:
+                    return child
+                else:
+                    if child.data not in visited:
+                        stack.append(child)
+                        names.append(child.data)
+
+            
 
 
 def depth_first_search():
@@ -49,6 +74,10 @@ def depth_first_search():
     graph1.add_edge(nodeH, nodeP)
     graph1.add_edge(nodeS, nodeR) 
     
-    print(graph1.nodes)
+    #print(graph1.nodes)
+
+    #assert nodeA == graph1.dfs_search(nodeS, 'A')  
+    assert nodeS == graph1.dfs_search(nodeP, 'S')
+    #assert nodeR == graph1.dfs_search(nodeH, 'R')
 
 depth_first_search()
