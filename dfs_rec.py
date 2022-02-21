@@ -31,14 +31,14 @@ class Graph:
             from_node.remove_child(from_node)
             to_node.remove_child(to_node)
 
-    def recursive_search(self, node: GraphNode, search_value: str): 
-        # if node.data not in self.dfs_visited:
-        #     self.dfs_visited.append(node.data) 
-     
+    def recursive_search(self, node: GraphNode, search_value: str):  
         if node.data == search_value: 
-            print("Found the value", node)
+            found = True 
+            self.dfs_visited = []
             return node
         else: 
+            found = False 
+            res = None 
             if node.data not in self.dfs_visited: 
                 self.dfs_visited.append(node.data)
             if len(node.children) == 0:
@@ -47,7 +47,10 @@ class Graph:
                 for child in node.children:
                     if child.data not in self.dfs_visited:
                         self.dfs_visited.append(child.data)
-                        return self.recursive_search(child, search_value) 
+                        res = self.recursive_search(child, search_value)  
+                        if res!=None:
+                            break
+                return res
               
                 
 
@@ -77,9 +80,10 @@ for each in graph1.nodes:
         print(each.data, end=' ')
     print('\n')
 
-print(graph1.recursive_search(nodeP, 'S'))
-# print(graph1.recursive_search(nodeG, 'A'))
-# assert nodeA.data == graph1.recursive_search(nodeG, 'A').data
-#assert nodeA.data == graph1.recursive_search(nodeS, 'A').data
-# assert nodeS.data == graph1.recursive_search(nodeP, 'S')
-# assert nodeR.data == graph1.recursive_search(nodeH, 'R').data
+# print(graph1.recursive_search(nodeP, 'S').data)
+#
+# print(graph1.recursive_search(nodeG, 'A').data)
+assert nodeA.data == graph1.recursive_search(nodeG, 'A').data
+# # # # #assert nodeA == graph1.recursive_search(nodeS, 'A')
+assert nodeS.data == graph1.recursive_search(nodeP, 'S').data
+assert nodeR.data == graph1.recursive_search(nodeH, 'R').data
