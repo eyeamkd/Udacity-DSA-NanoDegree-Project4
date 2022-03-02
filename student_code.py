@@ -57,6 +57,7 @@ def shortest_path(M, start, goal):
     path_queue = PriorityQueue()
     node_collection = []
     visited = set()
+    resultant_path = []
 
     for node in test_map_intersections.keys():
         new_node: Node = Node(test_map_intersections[node], goal_node, start_node, test_map_roads[node])
@@ -72,26 +73,28 @@ def shortest_path(M, start, goal):
 
     while path_queue.not_empty:
         item = path_queue.get()
+        resultant_path.append(item[1])
         visited.add(item[1])
-        if item == goal:
+        if item[1] == goal:
             break
-        children = test_map_roads[item[1]]
-        for child in children:
-            if child not in visited:
-                child_path_cost = get_distance(test_map_intersections[start], test_map_intersections[child])
-                heuristic = get_distance(test_map_intersections[goal], test_map_intersections[child])
-                final_distance = child_path_cost + heuristic
-                print("Child ", child, "cost ", final_distance)
-                path_queue.put((final_distance, child))
+        else:
+            children = test_map_roads[item[1]]
+            for child in children:
+                if child not in visited:
+                    child_path_cost = get_distance(test_map_intersections[start], test_map_intersections[child])
+                    heuristic = get_distance(test_map_intersections[goal], test_map_intersections[child])
+                    final_distance = child_path_cost + heuristic
+                    #print("Child ", child, "cost ", final_distance)
+                    path_queue.put((final_distance, child))
 
-
+    print(resultant_path)
                 # calculate the heuristic distance
     # take the initial start node
     # expand each node, and for each node calculate the final path = cost_path + heuristic_path
     # arrange the nodes that are expanded according to the final path
     # keep expanding the final path until the result is reaached
     print("shortest path called")
-    return
+    return resultant_path
 
 
 shortest_path('map', 7, 4)
