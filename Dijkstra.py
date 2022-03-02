@@ -20,7 +20,7 @@ class Node:
 
 
 def find_shortest_path():
-    result = {}
+    result = {'A':0,'B': float('inf'), 'C': float('inf'), 'D':float('inf'), 'E': float('inf'), 'F': float('inf')}
     unvisited = set()
 
     node_a = Node('A')
