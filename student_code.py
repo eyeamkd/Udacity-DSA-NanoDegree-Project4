@@ -61,16 +61,31 @@ def shortest_path(M, start, goal):
     for node in test_map_intersections.keys():
         new_node: Node = Node(test_map_intersections[node], goal_node, start_node, test_map_roads[node])
         node_collection.append(new_node)
-        path_queue.put((new_node.heuristic_cost, new_node))
+        # path_queue.put((new_node.heuristic_cost, new_node))
 
-    print(path_queue.queue)
+    # print(path_queue.queue)
+
+    initial_node = Node(start_node, goal_node, start_node, test_map_roads[start])
+    print(initial_node.path_cost, initial_node.heuristic_cost, initial_node.children)
+
+    path_queue.put((initial_node.heuristic_cost, start))
 
     while path_queue.not_empty:
         item = path_queue.get()
+        visited.add(item[1])
+        if item == goal:
+            break
+        children = test_map_roads[item[1]]
+        for child in children:
+            if child not in visited:
+                child_path_cost = get_distance(test_map_intersections[start], test_map_intersections[child])
+                heuristic = get_distance(test_map_intersections[goal], test_map_intersections[child])
+                final_distance = child_path_cost + heuristic
+                print("Child ", child, "cost ", final_distance)
+                path_queue.put((final_distance, child))
 
 
-
-    # calculate the heuristic distance
+                # calculate the heuristic distance
     # take the initial start node
     # expand each node, and for each node calculate the final path = cost_path + heuristic_path
     # arrange the nodes that are expanded according to the final path
