@@ -1,4 +1,5 @@
 from calendar import c
+from cmath import sqrt
 import math
 from operator import ne
 from queue import PriorityQueue
@@ -50,9 +51,79 @@ class A_Star_Search:
         self.path_trace = {} #used to generate the path 
         self.queue = PriorityQueue() 
         self.visited = set()
-        pass 
+        pass  
     
-    def calculate_h_score(self, node):
+    def calculate_manhattan_distance(self, node1, node2):  
+        """
+        Manhattan distance is a standard heuristic measurement for Square grid type of graphs 
+        It returns the absolute of the difference between the two coordinates
+        
+        """
+        node1_x = node1[0]
+        node1_y = node1[1]
+        node2_x = node2[0]
+        node2_y = node2[1] 
+        
+        return abs(node1_x - node2_x)+abs(node1_y - node2_y) 
+    
+    def calculate_diagonal_distance(self, node1, node2): 
+        """_
+        There are two types of diagonal distances to choose from 
+        both Chebyshev and Octile have varying parameters (D2)  
+        The calculation below is the diagonal distance between the two points
+        
+        """
+        node1_x = node1[0]
+        node1_y = node1[1]
+        node2_x = node2[0]
+        node2_y = node2[1] 
+        
+        dx = abs(node2_x - node1_x)
+        dy = abs(node2_y - node1_y)
+        
+        D = 1 
+        D2 = 1 # this is for the chebyshev distance 
+        
+        chebyshev_distance = D*(dx+dy) + (D2 - 2 *D) *min(dx,dy)  
+        
+        D2 = sqrt(2)
+        octile_distance = D*(dx+dy) + (D2 - 2 *D) *min(dx,dy) 
+        
+    
+    def calculate_euclidean_distance_squared(self, node1, node2): 
+        """_
+        Returns the same euclidean distance but squared
+        """
+        node1_x = node1[0]
+        node1_y = node1[1]
+        node2_x = node2[0]
+        node2_y = node2[1]  
+        
+        x_distance = (node1_x - node2_x) * (node1_x - node2_x)
+        y_distance = (node1_y - node2_y) * (node1_y - node2_y) 
+        
+        return (x_distance)+(y_distance)
+        
+        
+    def calculate_euclidean_distance(self, node1, node2): 
+        """  
+        Details: 
+        returns the square root of the squared distance between the two coordinates
+        """
+        node1_x = node1[0]
+        node1_y = node1[1]
+        node2_x = node2[0]
+        node2_y = node2[1]
+
+        x_distance = (node1_x - node2_x) * (node1_x - node2_x)
+        y_distance = (node1_y - node2_y) * (node1_y - node2_y)
+
+        return math.sqrt(x_distance + y_distance); 
+    
+    def calculate_h_score(self, node): 
+        #The above functions are the four ways in which we can calculate the heuristic value 
+        # However in this solution I have chosen to go with the euclidean distance as my 
+        # heuristic function
         return  self.calculate_euclidean_distance(node, self.end_node)  
 
     def calculate_g_score(self, current_node_name, neighbor_node_name):  
@@ -104,21 +175,9 @@ class A_Star_Search:
             current = self.path_trace[current] 
             trace.append(current) 
         trace.reverse()
-        return trace
-                 
-    # I have used Euclidean distance here but this can also be solved using 
-    # Manhattan distance heuristic which in this case would be abs(x1 - y1) + abs(x2 - y2) 
-    # since heuristic is just a abstract relative measurement it doesn't need to be something accurate 
-    def calculate_euclidean_distance(self, node1, node2):
-        node1_x = node1[0]
-        node1_y = node1[1]
-        node2_x = node2[0]
-        node2_y = node2[1]
-
-        x_distance = (node1_x - node2_x) * (node1_x - node2_x)
-        y_distance = (node1_y - node2_y) * (node1_y - node2_y)
-
-        return math.sqrt(x_distance + y_distance); 
+        return trace 
+    
+  
 
     def run_search(self):  
         current_node = self.start_node
@@ -158,44 +217,3 @@ a_star_search = A_Star_Search(M,7,4 )
 a_star_search2 = A_Star_Search(M2, 5, 34)
 print(a_star_search.run_search()) 
 print(a_star_search2.run_search())
-
-    
-
-
-
-# def shortest_path(self, M, start, goal):
-#         node_map = M
-#         start_node = test_map_intersections[start]
-#         goal_node = test_map_intersections[goal]
-#         path_queue = PriorityQueue()
-#         node_collection = []
-#         visited = set()
-#         resultant_path = []
-
-       
-
-        
-#         path_queue.put((initial_node.heuristic_cost, start))
-
-#         while path_queue.not_empty:
-#             item = path_queue.get()
-#             resultant_path.append(item[1])
-#             visited.add(item[1])
-#             if item[1] == goal:
-#                 break
-#             else:
-#                 children = test_map_roads[item[1]]
-#                 for child in children:
-#                     if child not in visited:
-#                         child_path_cost = self.get_distance(test_map_intersections[start], test_map_intersections[child])
-#                         heuristic = self.get_distance(test_map_intersections[goal], test_map_intersections[child])
-#                         final_distance = child_path_cost + heuristic
-#                         path_queue.put((final_distance, child))
-
-#         print(resultant_path)
-
-#         print("shortest path called")
-#         return resultant_path
-
-
-
