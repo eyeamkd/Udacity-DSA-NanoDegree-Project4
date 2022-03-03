@@ -30,9 +30,9 @@ class GraphNode:
     
     def print_children(self):
         for child in self.children.keys():
-            print(self.name,"------>",child)    
+            print(self.name,"------>",child) 
 
-def find_shortest_path(num_islands, bridge_config):  
+def get_graph(num_islands, bridge_config):
     graph = Graph();
     for island in range(num_islands):
         config = bridge_config[island] 
@@ -52,7 +52,26 @@ def find_shortest_path(num_islands, bridge_config):
         
         island_1_node.add_child(island_2, cost) 
         island_2_node.add_child(island_1, cost) 
+    return graph     
+
+def find_shortest_path(num_islands, bridge_config):  
+    graph = get_graph(num_islands, bridge_config) 
+    result = {} 
+    root_node = list(graph.nodes)[0]   
+    current_node: GraphNode = root_node 
+    children = current_node.children 
+    min_distance = {'dist':9999, 'name':None};
+    for child in children.keys():
+        if children[child] < min_distance.dist:
+            min_distance.dist = children[child]
+            min_distance.name = child
+    current_node = graph.get_node_by_name(min_distance.name) 
+    result[current_node.name] = min_distance.dist
     print(graph) 
+        
+        
+    
+    
 
 # test   
 
